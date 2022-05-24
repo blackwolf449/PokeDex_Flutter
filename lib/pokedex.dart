@@ -18,6 +18,7 @@ class PokedexState extends State<Pokedex> {
     return Padding(
       padding: const EdgeInsets.all(30),
       child: Container(
+        width: 600,
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(10),
