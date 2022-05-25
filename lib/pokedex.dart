@@ -18,7 +18,7 @@ class PokedexState extends State<Pokedex> {
     return Padding(
       padding: const EdgeInsets.all(30),
       child: Container(
-        width: 600,
+        width: 565,
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(10),
@@ -66,7 +66,36 @@ class PokedexState extends State<Pokedex> {
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(5)),
                   width: 10,
-                ))
+                )),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            const TextField(
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                fillColor: Colors.white,
+                                filled: true,
+                                hintText: "Digite o pokemon",
+                              ),
+                            )
+                          ]),
+                    )
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
