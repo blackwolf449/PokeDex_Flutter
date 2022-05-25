@@ -87,9 +87,20 @@ class PokedexState extends State<Pokedex> {
                                 border: OutlineInputBorder(),
                                 fillColor: Colors.white,
                                 filled: true,
-                                hintText: "Digite o pokemon",
+                                hintText: "Search pokemon...",
                               ),
-                            )
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ElevatedButton(
+                                onPressed: () {},
+                                child: Row(
+                                  children: const [
+                                    Icon(Icons.search),
+                                    Text('Search')
+                                  ],
+                                ))
                           ]),
                     )
                   ],
