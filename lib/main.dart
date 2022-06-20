@@ -12,8 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-      appBar: AppBar(title: const Text('Pokedex in flutter')),
-      body: const Pokedex(),
-    ));
+            appBar: AppBar(title: const Text('Pokedex in flutter')),
+            body: const PokeDex()));
   }
 }

@@ -1,115 +1,82 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pokedex/poke_request.dart';
 
-class Pokedex extends StatefulWidget {
-  const Pokedex({Key? key}) : super(key: key);
+class PokeDex extends StatefulWidget {
+  const PokeDex({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return PokedexState();
+    return _PokeDexState();
   }
 }
 
-class PokedexState extends State<Pokedex> {
+class _PokeDexState extends State<PokeDex> {
+  String front =
+      "https://natabox.s3.sa-east-1.amazonaws.com/mmtrtarRkmAQhqqzWpJQGIK3zZpaQ8IXNVCTWVD9.png";
+  String back =
+      "https://natabox.s3.sa-east-1.amazonaws.com/mmtrtarRkmAQhqqzWpJQGIK3zZpaQ8IXNVCTWVD9.png";
+  String name = "";
+  String type = "";
   @override
   Widget build(BuildContext context) {
-    String name = "";
-    String type = "";
     return Padding(
-      padding: const EdgeInsets.all(30),
-      child: Container(
-        width: 565,
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Image.asset('assets/image/nothing.png'),
-                          Image.asset('assets/image/nothing.png')
-                        ],
-                      ),
-                      Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text("$name test",
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20)),
-                            Text("$type test",
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20)),
-                          ])
-                    ],
-                  ),
-                ),
-              ),
+        padding: const EdgeInsets.all(30),
+        child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.red,
             ),
-            Padding(
-                padding: const EdgeInsets.all(0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(5)),
-                  width: 10,
-                )),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
+            child: Padding(
+                padding: const EdgeInsets.all(30),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: 200,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          // ignore: prefer_const_literals_to_create_immutables
-                          children: [
-                            const TextField(
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                fillColor: Colors.white,
-                                filled: true,
-                                hintText: "Search pokemon...",
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ElevatedButton(
-                                onPressed: () {},
-                                child: Row(
-                                  children: const [
-                                    Icon(Icons.search),
-                                    Text('Search')
-                                  ],
-                                ))
-                          ]),
-                    )
+                    Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.black,
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.all(30),
+                            child: Column(
+                              children: [
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Image.network(front),
+                                      Image.network(back),
+                                    ]),
+                                Text(
+                                  name,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                Text(
+                                  type,
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              ],
+                            ))),
+                    Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: TextField(
+                        onChanged: (value) async {
+                          dynamic response = await login(value);
+                          print(response.success);
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          hintText: 'Search...',
+                          fillColor: Colors.white,
+                          filled: true,
+                        ),
+                      ),
+                    ),
                   ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+                ))));
   }
 }
