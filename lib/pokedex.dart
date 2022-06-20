@@ -64,7 +64,9 @@ class _PokeDexState extends State<PokeDex> {
                       child: TextField(
                         onChanged: (value) async {
                           dynamic response = await login(value);
-                          print(response.success);
+                          if (response.success) {
+                            print(response.pokemon);
+                          }
                         },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
