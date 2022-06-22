@@ -17,7 +17,7 @@ class _PokeDexState extends State<PokeDex> {
   String back =
       "https://natabox.s3.sa-east-1.amazonaws.com/mmtrtarRkmAQhqqzWpJQGIK3zZpaQ8IXNVCTWVD9.png";
   String name = "";
-  String type = "";
+  List<String> type = [];
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -54,7 +54,7 @@ class _PokeDexState extends State<PokeDex> {
                                   style: const TextStyle(color: Colors.white),
                                 ),
                                 Text(
-                                  type,
+                                  type.join(" ,"),
                                   style: const TextStyle(color: Colors.white),
                                 )
                               ],
@@ -63,10 +63,14 @@ class _PokeDexState extends State<PokeDex> {
                       padding: const EdgeInsets.all(30),
                       child: TextField(
                         onChanged: (value) async {
-                          dynamic response = await login(value);
-                          if (response.success) {
-                            print(response.pokemon);
-                          }
+                          String name = value != '' ? value : 'none';
+                          Status response = await login(name);
+                          setState(() {
+                            front = response.pokemon.front;
+                            back = response.pokemon.back;
+                            this.name = response.pokemon.name;
+                            type = response.pokemon.type;
+                          });
                         },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
