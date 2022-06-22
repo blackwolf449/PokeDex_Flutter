@@ -18,6 +18,10 @@ class _PokeDexState extends State<PokeDex> {
       "https://natabox.s3.sa-east-1.amazonaws.com/mmtrtarRkmAQhqqzWpJQGIK3zZpaQ8IXNVCTWVD9.png";
   String name = "";
   List<String> type = [];
+  bool female = false;
+  bool shyne = false;
+  dynamic colorFemale = Colors.red[300];
+  dynamic colorShyne = Colors.red[300];
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -82,6 +86,45 @@ class _PokeDexState extends State<PokeDex> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                colorFemale = colorFemale == Colors.blue
+                                    ? Colors.red[300]
+                                    : Colors.blue;
+                              });
+                            },
+                            child: const Text(
+                              'Female',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            style:
+                                ElevatedButton.styleFrom(primary: colorFemale),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                setState(() {
+                                  colorShyne = colorShyne == Colors.blue
+                                      ? Colors.red[300]
+                                      : Colors.blue;
+                                });
+                              });
+                            },
+                            child: const Text(
+                              'Shyne',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            style:
+                                ElevatedButton.styleFrom(primary: colorShyne),
+                          )
+                        ],
+                      ),
+                    )
                   ],
                 ))));
   }
