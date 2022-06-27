@@ -1,11 +1,11 @@
-import 'dart:ffi';
-
 import 'package:dio/dio.dart';
+import 'package:pokedex/class/status.dart';
+import 'package:pokedex/class/pokemon.dart';
 
 final Dio dio = Dio();
 const String url = 'https://pokeapi.co/api/v2/pokemon';
 
-login(name) async {
+pokeSearch(String name, bool female, bool shiny) async {
   try {
     Response<dynamic> response = await dio.get("$url/$name");
     Response<dynamic> form = await dio.get(response.data['forms'][0]['url']);
@@ -14,10 +14,11 @@ login(name) async {
     for (int i = 0; i < reqTypes.length; i++) {
       arrTypes.add(reqTypes[i]['type']['name']);
     }
+    List splash = splashArt(form, female, shiny);
     Pokemon pokemon = Pokemon(
         form.data['name'],
-        form.data['sprites']['front_default'],
-        form.data['sprites']['back_default'],
+        form.data['sprites'][splash[0]],
+        form.data['sprites'][splash[1]],
         arrTypes);
     Status success = Status(true, 'deu certo', pokemon);
     return success;
@@ -32,19 +33,33 @@ login(name) async {
   }
 }
 
-class Pokemon {
-  String name;
-  String front;
-  String back;
-  List<String> type;
-
-  Pokemon(this.name, this.front, this.back, this.type);
-}
-
-class Status {
-  bool success;
-  String message;
-  Pokemon pokemon;
-
-  Status(this.success, this.message, this.pokemon);
+splashArt(form, female, shiny) {
+  if (form.data['sprites']['front_shiny_female'] != null) {
+    if (female && shiny) {
+      return ['front_shiny_female', 'back_shiny_female'];
+    }
+    if (!female && shiny) {
+      return ['front_shiny', 'back_shiny'];
+    }
+    if (female && !shiny) {
+      return ['front_female', 'back_female'];
+    }
+    return ['front_default', 'back_default'];
+  }
+  if (form.data['sprites']['front_female'] == null &&
+      form.data['sprites']['front_shiny'] != null) {
+    if (shiny) {
+      return ['front_shiny', 'back_shiny'];
+    }
+    return ['front_default', 'back_default'];
+  }
+  if (form.data['sprites']['front_female'] != null &&
+      form.data['sprites']['front_shiny'] == null) {
+    if (female) {
+      return ['front_female', 'back_female'];
+    }
+    return ['front_default', 'back_default'];
+  } else {
+    return ['front_default', 'back_default'];
+  }
 }

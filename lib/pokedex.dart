@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pokedex/poke_request.dart';
+import 'dart:async';
+import 'package:pokedex/class/status.dart';
 
 class PokeDex extends StatefulWidget {
   const PokeDex({Key? key}) : super(key: key);
@@ -12,21 +13,37 @@ class PokeDex extends StatefulWidget {
 }
 
 class _PokeDexState extends State<PokeDex> {
+  bool female = false;
+  bool shiny = false;
   String front =
       "https://natabox.s3.sa-east-1.amazonaws.com/mmtrtarRkmAQhqqzWpJQGIK3zZpaQ8IXNVCTWVD9.png";
   String back =
       "https://natabox.s3.sa-east-1.amazonaws.com/mmtrtarRkmAQhqqzWpJQGIK3zZpaQ8IXNVCTWVD9.png";
   String name = "";
   List<String> type = [];
-  bool female = false;
-  bool shyne = false;
   dynamic colorFemale = Colors.red[300];
   dynamic colorShyne = Colors.red[300];
+  TextEditingController pokeInput = TextEditingController();
+
+  setPokemon(value) {
+    Timer(const Duration(milliseconds: 500), () async {
+      String name = value.toString() != '' ? value.toString() : 'none';
+      Status response = await pokeSearch(name, female, shiny);
+      setState(() {
+        front = response.pokemon.front;
+        back = response.pokemon.back;
+        this.name = response.pokemon.name;
+        type = response.pokemon.type;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(30),
         child: Container(
+            width: 400,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: Colors.red,
@@ -36,6 +53,7 @@ class _PokeDexState extends State<PokeDex> {
                 child: Column(
                   children: [
                     Container(
+                        height: 200,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: Colors.black,
@@ -66,16 +84,8 @@ class _PokeDexState extends State<PokeDex> {
                     Padding(
                       padding: const EdgeInsets.all(30),
                       child: TextField(
-                        onChanged: (value) async {
-                          String name = value != '' ? value : 'none';
-                          Status response = await login(name);
-                          setState(() {
-                            front = response.pokemon.front;
-                            back = response.pokemon.back;
-                            this.name = response.pokemon.name;
-                            type = response.pokemon.type;
-                          });
-                        },
+                        controller: pokeInput,
+                        onChanged: setPokemon(pokeInput.text),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -89,6 +99,8 @@ class _PokeDexState extends State<PokeDex> {
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           ElevatedButton(
                             onPressed: () {
@@ -97,6 +109,8 @@ class _PokeDexState extends State<PokeDex> {
                                     ? Colors.red[300]
                                     : Colors.blue;
                               });
+                              female = !female;
+                              setPokemon(pokeInput.text);
                             },
                             child: const Text(
                               'Female',
@@ -105,18 +119,19 @@ class _PokeDexState extends State<PokeDex> {
                             style:
                                 ElevatedButton.styleFrom(primary: colorFemale),
                           ),
+                          const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () {
                               setState(() {
-                                setState(() {
-                                  colorShyne = colorShyne == Colors.blue
-                                      ? Colors.red[300]
-                                      : Colors.blue;
-                                });
+                                colorShyne = colorShyne == Colors.blue
+                                    ? Colors.red[300]
+                                    : Colors.blue;
                               });
+                              shiny = !shiny;
+                              setPokemon(pokeInput.text);
                             },
                             child: const Text(
-                              'Shyne',
+                              'Shiny',
                               style: TextStyle(fontSize: 20),
                             ),
                             style:
