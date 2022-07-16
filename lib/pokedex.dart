@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/class/debounce.dart';
 import 'package:pokedex/poke_request.dart';
 import 'dart:async';
 import 'package:pokedex/class/status.dart';
@@ -24,17 +25,16 @@ class _PokeDexState extends State<PokeDex> {
   dynamic colorFemale = Colors.red[300];
   dynamic colorShyne = Colors.red[300];
   TextEditingController pokeInput = TextEditingController();
+  final Debounce _debounce = Debounce(milliseconds: 1000);
 
-  setPokemon(value) {
-    Timer(const Duration(milliseconds: 500), () async {
-      String name = value.toString() != '' ? value.toString() : 'none';
-      Status response = await pokeSearch(name, female, shiny);
-      setState(() {
-        front = response.pokemon.front;
-        back = response.pokemon.back;
-        this.name = response.pokemon.name;
-        type = response.pokemon.type;
-      });
+  setPokemon(value) async {
+    String name = value.toString() != '' ? value.toString() : 'none';
+    Status response = await pokeSearch(name, female, shiny);
+    setState(() {
+      front = response.pokemon.front;
+      back = response.pokemon.back;
+      this.name = response.pokemon.name;
+      type = response.pokemon.type;
     });
   }
 
@@ -85,7 +85,9 @@ class _PokeDexState extends State<PokeDex> {
                       padding: const EdgeInsets.all(30),
                       child: TextField(
                         controller: pokeInput,
-                        onChanged: setPokemon(pokeInput.text),
+                        onChanged: _debounce.run(() {
+                          setPokemon(pokeInput.text);
+                        }),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
